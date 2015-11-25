@@ -16,14 +16,24 @@ if (typeof UPLOADCARE_CROP == 'undefined') {
                 stateSelector : 'img'
             });
 
-            ed.addCommand('showUploadcareDialog',function() {   
+            ed.addCommand('showUploadcareDialog',function() {
                 var dialog = uploadcare.openDialog().done(function(file) {
                     file.done(function(fileInfo) {
                         if (fileInfo.isImage) {
                             ed.execCommand('mceInsertContent', false, '<img src="' + fileInfo.cdnUrl + '" />');
                         } else {
                             ed.execCommand('mceInsertContent', false, '<a href="' + fileInfo.cdnUrl + '">' + fileInfo.name + '</a>');
-                        }
+                        };
+                        // Create new asset for uploaded image
+                        jQuery.ajax({
+                          url: "assets/create",
+                          type: "POST",
+                          data: { asset: { file_url: fileInfo.cdnUrl } },
+                          dataType: "json",
+                          success: function(data){
+                            // data will be the response object(json)
+                          }
+                        });
                     });
                 });
             });
