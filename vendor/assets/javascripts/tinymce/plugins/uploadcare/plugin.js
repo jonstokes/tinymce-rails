@@ -20,15 +20,20 @@ if (typeof UPLOADCARE_CROP == 'undefined') {
                 var dialog = uploadcare.openDialog().done(function(file) {
                     file.done(function(fileInfo) {
                         if (fileInfo.isImage) {
-                            ed.execCommand('mceInsertContent', false, '<img src="' + fileInfo.cdnUrl + '" />');
+                            ed.execCommand('mceInsertContent', false, '<img src="' + fileInfo.cdnUrl + '" class="img-responsive"/>');
                         } else {
                             ed.execCommand('mceInsertContent', false, '<a href="' + fileInfo.cdnUrl + '">' + fileInfo.name + '</a>');
                         };
+
                         // Create new asset for uploaded image
                         jQuery.ajax({
                           url: "assets/create",
                           type: "POST",
-                          data: { asset: { file_url: fileInfo.cdnUrl } },
+                          data: {
+                            asset: {
+                              file_url: fileInfo.cdnUrl
+                            }
+                          },
                           dataType: "json",
                           success: function(data){
                             // data will be the response object(json)
